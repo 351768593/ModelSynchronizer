@@ -81,20 +81,25 @@ public class PhaseCompare implements IPhaseCompare
 					var fieldDatabase = tableDatabase.getField(nameField);
 					// 对比两个字段之间的差异
 					var diffField = compareField(fieldBean, fieldDatabase);
-					if(diffField != null) synchronized (ret) { ret.add(diffField); }
+					if(!diffField.isEmpty()) synchronized (ret) { ret.addAll(diffField); }
 				});
 		return ret;
 	}
 
 	/**
-	 * @return 字段间差异. 如果没有差异则返回 null
+	 * @return 字段间差异
 	 */
-	public AbstractDiff compareField(MetaField fieldBean, MetaField fieldDatabase)
+	public List<AbstractDiff> compareField(MetaField fieldBean, MetaField fieldDatabase)
 	{
-		return fieldBean.name().equals(fieldDatabase.name()) &&
+		var ret = new ArrayList<AbstractDiff>(1);
+
+		if(fieldBean.name().equals(fieldDatabase.name()) &&
 				fieldBean.type() == fieldDatabase.type() &&
-				fieldBean.length() == fieldDatabase.length() ?
-				null :
-				new DiffFieldConflict(fieldBean, fieldDatabase);
+				fieldBean.length() == fieldDatabase.length())
+		{
+			ret.add(new DiffFieldConflict(fieldBean, fieldDatabase));
+		}
+
+		return ret;
 	}
 }

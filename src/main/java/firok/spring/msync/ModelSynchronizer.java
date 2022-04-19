@@ -5,6 +5,7 @@ import firok.spring.msync.phase.*;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.net.NetworkInterface;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -114,5 +115,10 @@ public class ModelSynchronizer implements Closeable
 		DefaultImplementations.sync_MVCI_MySQL(
 				"jdbc:mysql://localhost:3306/?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull",
 				"blogy", "root", "root");
+		var iterNI = NetworkInterface.getNetworkInterfaces();
+		while(iterNI.hasMoreElements())
+		{
+			var ni = iterNI.nextElement();
+		}
 	}
 }
